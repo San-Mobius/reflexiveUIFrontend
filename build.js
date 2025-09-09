@@ -9,7 +9,6 @@ const arg = process.argv[2]; // "js" or "html"
 
 const filesToUpload = [
   { file: "index.html", filePath: "MAC", contentTags: "html" },
-  { file: "script.js", filePath: "MAC", contentTags: "js" }
 ];
 
 async function uploadFile({ file, filePath, contentTags }) {
@@ -46,7 +45,7 @@ async function build() {
   const logStream = fs.createWriteStream("log.txt", { flags: "a" });
   logStream.write(`\n--- Build started at ${new Date().toISOString()} ---\n`);
 
-  if (arg === "js" || arg === "html") {
+  if (arg === "html") {
     const file = filesToUpload.find(f => f.contentTags === arg);
     try {
         const result = await uploadFile(file);
