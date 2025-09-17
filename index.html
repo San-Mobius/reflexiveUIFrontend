@@ -7,6 +7,7 @@
 
   <!-- HTMX (progressive enhancement) -->
   <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/graphology/0.26.0/graphology.umd.min.js" integrity="sha512-Hqa5FKQ53pYDWaRnytoNvRT3JXRac7dcH+kB3RUCX69CGNrnz5LE76Mp0z186qDv0LBWrwx5QipEoenZB5CE4w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
   <!-- Minimal, tasteful styles (no framework required) -->
   <style>
@@ -66,8 +67,8 @@
 
   <!-- The card that will be swapped on success/failure -->
   <div id="form-card" class="card">
-    <h1>Welcome back</h1>
-    <p class="lead">Please sign in to continue</p>
+    <h1 id="greetings" >Welcome back</h1>
+    <p  id="signInMessage" class="lead">Please sign in to continue</p>
 
     <!-- Progressive enhancement: works as a normal POST, but HTMX hijacks to /login -->
     <form
