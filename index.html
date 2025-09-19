@@ -1,155 +1,288 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Login</title>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Login</title>
 
-  <!-- HTMX (progressive enhancement) -->
-  <script src="https://unpkg.com/htmx.org@1.9.12"></script>
-  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/graphology/0.26.0/graphology.umd.min.js" integrity="sha512-Hqa5FKQ53pYDWaRnytoNvRT3JXRac7dcH+kB3RUCX69CGNrnz5LE76Mp0z186qDv0LBWrwx5QipEoenZB5CE4w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- HTMX (progressive enhancement) -->
+    <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+    <script
+      defer
+      src="https://cdnjs.cloudflare.com/ajax/libs/graphology/0.26.0/graphology.umd.min.js"
+      integrity="sha512-Hqa5FKQ53pYDWaRnytoNvRT3JXRac7dcH+kB3RUCX69CGNrnz5LE76Mp0z186qDv0LBWrwx5QipEoenZB5CE4w=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
 
-  <!-- Minimal, tasteful styles (no framework required) -->
-  <style>
-    :root { --bg:#0b1020; --card:#141a2e; --text:#e6eaf2; --muted:#9aa3b2; --brand:#4da3ff; --danger:#ff6b6b; }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-      color: var(--text); background: radial-gradient(1000px 600px at 50% -10%, #1a2442 0%, var(--bg) 60%);
-      min-height: 100dvh; display: grid; place-items: center; padding: 24px;
-    }
-    .card {
-      width: 100%; max-width: 420px; background: color-mix(in oklab, var(--card), black 6%);
-      border: 1px solid color-mix(in oklab, var(--card), white 8%);
-      border-radius: 16px; padding: 24px 22px 20px; box-shadow: 0 20px 50px rgba(0,0,0,.35);
-      transition: transform .2s ease;
-    }
-    h1 { font-size: 1.25rem; margin: 0 0 4px; }
-    p.lead { margin: 0 0 18px; color: var(--muted); font-size: .95rem; }
-    .field { margin: 14px 0; }
-    label { display: block; font-size: .85rem; color: var(--muted); margin-bottom: 6px; }
-    input[type="email"], input[type="password"] {
-      width: 100%; padding: 12px 12px; border-radius: 10px; background: #0f1528; color: var(--text);
-      border: 1px solid #283357; outline: none;
-    }
-    input:focus { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(77,163,255,.18); }
-    .row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 8px; }
-    .actions { display: grid; gap: 10px; margin-top: 16px; }
-    button[type="submit"] {
-      appearance: none; border: none; border-radius: 10px; padding: 12px 14px; cursor: pointer;
-      background: linear-gradient(180deg, #5ab0ff, #3986eb); color: white; font-weight: 600;
-    }
-    button[disabled] { opacity: .7; cursor: not-allowed; }
-    a { color: var(--brand); text-decoration: none; }
-    .checkbox { display: inline-flex; align-items: center; gap: 8px; font-size: .9rem; color: var(--muted); }
-    .help { font-size: .9rem; color: var(--muted); }
-    .error, .success {
-      border-radius: 10px; padding: 10px 12px; font-size: .92rem; margin: 10px 0 0;
-    }
-    .error { background: color-mix(in oklab, var(--danger), black 75%); color: #ffdcdc; border: 1px solid color-mix(in oklab, var(--danger), white 20%); }
-    .success { background: rgba(77,163,255,.12); color: #d5e9ff; border: 1px solid rgba(77,163,255,.35); }
-    .spinner {
-      display: inline-block; width: 18px; height: 18px; border-radius: 50%;
-      border: 2px solid #c6dcff; border-top-color: transparent; vertical-align: -4px;
-      animation: spin .8s linear infinite; margin-left: 8px;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    /* htmx request state hooks */
-    .htmx-request [data-when="idle"] { display: none; }
-    .htmx-request [data-when="loading"] { display: inline-block; }
-    .htmx-indicator { display: none; }
-  </style>
+    <!-- Minimal, tasteful styles (no framework required) -->
+    <style>
+      :root {
+        --bg: #0b1020;
+        --card: #141a2e;
+        --text: #e6eaf2;
+        --muted: #9aa3b2;
+        --brand: #4da3ff;
+        --danger: #ff6b6b;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
+          Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji",
+          "Segoe UI Emoji";
+        color: var(--text);
+        background: radial-gradient(
+          1000px 600px at 50% -10%,
+          #1a2442 0%,
+          var(--bg) 60%
+        );
+        min-height: 100dvh;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+      }
+      .card {
+        width: 100%;
+        max-width: 420px;
+        background: color-mix(in oklab, var(--card), black 6%);
+        border: 1px solid color-mix(in oklab, var(--card), white 8%);
+        border-radius: 16px;
+        padding: 24px 22px 20px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+        transition: transform 0.2s ease;
+      }
+      h1 {
+        font-size: 1.25rem;
+        margin: 0 0 4px;
+      }
+      p.lead {
+        margin: 0 0 18px;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+      .field {
+        margin: 14px 0;
+      }
+      label {
+        display: block;
+        font-size: 0.85rem;
+        color: var(--muted);
+        margin-bottom: 6px;
+      }
+      input[type="email"],
+      input[type="password"] {
+        width: 100%;
+        padding: 12px 12px;
+        border-radius: 10px;
+        background: #0f1528;
+        color: var(--text);
+        border: 1px solid #283357;
+        outline: none;
+      }
+      input:focus {
+        border-color: var(--brand);
+        box-shadow: 0 0 0 3px rgba(77, 163, 255, 0.18);
+      }
+      .row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-top: 8px;
+      }
+      .actions {
+        display: grid;
+        gap: 10px;
+        margin-top: 16px;
+      }
+      button[type="submit"] {
+        appearance: none;
+        border: none;
+        border-radius: 10px;
+        padding: 12px 14px;
+        cursor: pointer;
+        background: linear-gradient(180deg, #5ab0ff, #3986eb);
+        color: white;
+        font-weight: 600;
+      }
+      button[disabled] {
+        opacity: 0.7;
+        cursor: not-allowed;
+      }
+      a {
+        color: var(--brand);
+        text-decoration: none;
+      }
+      .checkbox {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.9rem;
+        color: var(--muted);
+      }
+      .help {
+        font-size: 0.9rem;
+        color: var(--muted);
+      }
+      .error,
+      .success {
+        border-radius: 10px;
+        padding: 10px 12px;
+        font-size: 0.92rem;
+        margin: 10px 0 0;
+      }
+      .error {
+        background: color-mix(in oklab, var(--danger), black 75%);
+        color: #ffdcdc;
+        border: 1px solid color-mix(in oklab, var(--danger), white 20%);
+      }
+      .success {
+        background: rgba(77, 163, 255, 0.12);
+        color: #d5e9ff;
+        border: 1px solid rgba(77, 163, 255, 0.35);
+      }
+      .spinner {
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        border: 2px solid #c6dcff;
+        border-top-color: transparent;
+        vertical-align: -4px;
+        animation: spin 0.8s linear infinite;
+        margin-left: 8px;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      /* htmx request state hooks */
+      .htmx-request [data-when="idle"] {
+        display: none;
+      }
+      .htmx-request [data-when="loading"] {
+        display: inline-block;
+      }
+      .htmx-indicator {
+        display: none;
+      }
+    </style>
 
-  <script type="text/javascript">
-    console.log("Setting __APP_ENV__ to dev");
-    window.__APP_ENV__ = "staging";
-  </script>
-</head>
-<body>
+    <script type="text/javascript">
+      console.log("Setting __APP_ENV__ to dev");
+      window.__APP_ENV__ = "staging";
+    </script>
+  </head>
+  <body>
+    <!-- Optional out-of-band flash area for server messages -->
+    <div id="reflexive-ui-entry">
+      <!-- The card that will be swapped on success/failure -->
+      <div id="form-card" class="card">
+        <h1>Welcome back</h1>
+        <p class="lead">Please sign in to continue</p>
 
-  <!-- Optional out-of-band flash area for server messages -->
-  <div id="reflexive-ui-entry">
+        <!-- Normal form submission (without HTMX) -->
+        <form
+          id="login-form"
+          method="POST"
+          action="http://localhost:8080/api/reflexiveUI/login"
+        >
+          <div class="field">
+            <label for="email">Email</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              inputmode="email"
+              autocomplete="username"
+              required
+              placeholder="you@example.com"
+            />
+          </div>
 
-  <!-- The card that will be swapped on success/failure -->
-  <div id="form-card" class="card">
-    <h1 id="greetings" >Welcome back</h1>
-    <p  id="signInMessage" class="lead">Please sign in to continue</p>
+          <div class="field">
+            <label for="password">Password</label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              autocomplete="current-password"
+              required
+              minlength="8"
+              placeholder="••••••••"
+            />
+          </div>
 
-    <!-- Progressive enhancement: works as a normal POST, but HTMX hijacks to /login -->
-    <form
-      id="login-form"http://localhost:8080
-      action="/login"
-      method="POST"
-      hx-post="http://localhost:8080/api/reflexiveUI/login"
-      hx-target="#form-card"
-      hx-swap="outerHTML"
-      hx-indicator="#submit-indicator"
-    >
-      <!-- Include your real CSRF token here -->
+          <div class="row">
+            <label class="checkbox">
+              <input type="checkbox" name="remember" value="1" />
+              Remember me
+            </label>
+            <a class="help" href="/forgot-password">Forgot password?</a>
+          </div>
 
-      <div class="field">
-        <label for="email">Email</label>
-        <input
-          id="email"
-          name="email"
-          type="email"
-          inputmode="email"
-          autocomplete="username"
-          required
-          placeholder="you@example.com"
-        />
+          <div class="actions">
+            <button type="submit">
+              Sign in
+              <!-- Loading indicator that appears only during request -->
+              <span
+                id="submit-indicator"
+                class="spinner"
+                aria-hidden="true"
+              ></span>
+            </button>
+            <div class="help">
+              No account? <a href="/register">Create one</a>
+            </div>
+          </div>
+
+          <!-- Client-side fallback error area (will be replaced by server messages) -->
+          <div id="client-error"></div>
+        </form>
       </div>
+    </div>
 
-      <div class="field">
-        <label for="password">Password</label>
-        <input
-          id="password"
-          name="password"
-          type="password"
-          autocomplete="current-password"
-          required
-          minlength="8"
-          placeholder="••••••••"
-        />
-      </div>
+    <!-- OPTIONAL: tiny enhancement to toggle password visibility (no framework) -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@1.8.4/dist/htmx.min.js"></script>
+    <script src="https://unpkg.com/htmx.org/dist/ext/sse.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script>
+      // Double-click the password field to toggle visibility (keeps UI minimal)
+      const pwd = document.getElementById("password");
+      if (pwd) {
+        pwd.addEventListener("dblclick", () => {
+          pwd.type = pwd.type === "password" ? "text" : "password";
+        });
+      }
+    </script>
+    <script>
+      // Handle form submission using Fetch API
+      document
+        .getElementById("login-form")
+        .addEventListener("submit", function (event) {
+          event.preventDefault(); // Prevent the default form submission
 
-      <div class="row">
-        <label class="checkbox">
-          <input type="checkbox" name="remember" value="1" />
-          Remember me
-        </label>
-        <a class="help" href="/forgot-password">Forgot password?</a>
-      </div>
+          const formData = new FormData(event.target);
 
-      <div class="actions">
-        <button type="submit">
-          Sign in
-          <!-- Loading indicator that appears only during HTMX request -->
-          <span id="submit-indicator" class="spinner htmx-indicator" aria-hidden="true"></span>
-        </button>
-        <div class="help">No account? <a href="/register">Create one</a></div>
-      </div>
-
-      <!-- Client-side fallback error area (will be replaced by server messages) -->
-      <div id="client-error"></div>
-    </form>
-  </div>
-  </div>
-
-  <!-- OPTIONAL: tiny enhancement to toggle password visibility (no framework) -->
-   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-<script src="https://cdn.jsdelivr.net/npm/htmx.org@1.8.4/dist/htmx.min.js"></script>
-<script src="https://unpkg.com/htmx.org/dist/ext/sse.js"></script>
-<script src="https://d3js.org/d3.v7.min.js"></script>
-  <script>
-    // Double-click the password field to toggle visibility (keeps UI minimal)
-    const pwd = document.getElementById('password');
-    if (pwd) {
-      pwd.addEventListener('dblclick', () => {
-        pwd.type = (pwd.type === 'password') ? 'text' : 'password';
-      });
-    }
-  </script>
-  <script defer src="https://ui-framework-node-api.gov-cloud.ai/assets/script.js"></script>
-</body>
+          // Send data using Fetch API
+          fetch(event.target.action, {
+            method: "POST",
+            body: JSON.stringify(Object.fromEntries(formData)),
+            headers: {
+              "Content-Type": "application/json", // Set content type to JSON
+            },
+            credentials: "include",
+          });
+        });
+    </script>
+    <script
+      defer
+      src="https://ui-framework-node-api.gov-cloud.ai/assets/script.js"
+    ></script>
+  </body>
 </html>
