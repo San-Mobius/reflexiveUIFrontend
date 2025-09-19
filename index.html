@@ -192,7 +192,7 @@
           action="http://localhost:8080/api/reflexiveUI/login"
         >
           <div class="field">
-            <label for="email">Email</label>
+            <label for="email" id="email">Email</label>
             <input
               id="email"
               name="email"
@@ -205,7 +205,7 @@
           </div>
 
           <div class="field">
-            <label for="password">Password</label>
+            <label for="password" id="password">Password</label>
             <input
               id="password"
               name="password"
@@ -222,11 +222,11 @@
               <input type="checkbox" name="remember" value="1" />
               Remember me
             </label>
-            <a class="help" href="/forgot-password">Forgot password?</a>
+            <a class="help" href="/forgot-password" id="forget_password">Forgot password?</a>
           </div>
 
           <div class="actions">
-            <button type="submit">
+            <button type="submit" id="signInButton">
               Sign in
               <!-- Loading indicator that appears only during request -->
               <span
@@ -236,7 +236,7 @@
               ></span>
             </button>
             <div class="help">
-              No account? <a href="/register">Create one</a>
+              No account? <a href="/register" id="create_one">Create one</a>
             </div>
           </div>
 
